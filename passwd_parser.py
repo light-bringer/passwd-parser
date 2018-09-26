@@ -1,5 +1,10 @@
 #!/usr/bin/env python2
 
+"""
+This module does blah blah.
+@Author : Debapriya Das <yodebu@gmail.com>
+"""
+
 
 import os
 import shutil
@@ -10,14 +15,14 @@ import argparse
 def read_passwd(filepath):
     '''
     a function to read the passwd files format
-    and turn them into a dictionary with key as 
+    and turn them into a dictionary with key as
     the username and the rest of the data parsed
     as a list
     input : filepath
     output : dict {
         'yodebu' : [
-            'yodebu', 
-            'Debapriya Das...', 
+            'yodebu',
+            'Debapriya Das...',
             '11eaadas',
             ......
             ]
@@ -47,27 +52,27 @@ def search_and_remove(users, shelldict):
     for user in users:
         if user in shells.keys():
             print "user found : %s" % (user)
-            a = shells.pop(user, None)
-            if a:
-                print "User popped : %s" % (a)
+            auser = shells.pop(user, None)
+            if auser:
+                print "User popped : %s" % (auser)
     return shells
 
 
 def write_passwd(filepath, shelldict):
     '''
-    a function to write the metadata to the 
-    new generate passwd file
+    a function to write the metadata to the
+    new generated passwd file
     '''
     try:
-        with open(filepath, 'w') as f:
+        with open(filepath, 'w') as fifi:
             for value in shelldict.values():
                 line = ":".join(value)
                 print "writing line: %s to file" % (line)
-                f.write("%s\n" % line)
+                fifi.write("%s\n" % line)
 
-    except (OSError, IOError), e:
+    except (OSError, IOError), error:
         print "Some file creation error..."
-        print e
+        print error
         return False
 
 
@@ -91,9 +96,9 @@ def backup(filepath, appendstr):
                 print "File permissions and stat not succesfully copied"
                 return False
             return destabspath
-    except (OSError, IOError), e:
+    except (OSError, IOError), err:
         print "Some copy error..."
-        print e
+        print err
         return False
 
 
@@ -108,9 +113,9 @@ def copy_permissions(src, dest):
         os.chown(dest, st[stat.ST_UID], st[stat.ST_GID])
         return True
 
-    except (OSError, IOError), e:
+    except (OSError, IOError), err:
         print "Some exception..."
-        print e
+        print err
         return False
 
 
@@ -124,9 +129,9 @@ def move_file(src, dest):
         dst_filename = os.path.join(dst_dirname, os.path.basename(src))
         shutil.move(src, dst_filename)
         print "moved file from %s to %s" % (src, dst_filename)
-    except (OSError, IOError), e:
+    except (OSError, IOError), err:
         print "Some exception in moving the file..."
-        print e
+        print err
         return False
 
 
@@ -160,12 +165,12 @@ def main(args):
 if __name__ == '__main__':
     helpstr = """Send usernames in comma separated format, with no space.\n
                 Example : python programname.py -u user1,user2"""
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-u', action='store', dest='users',
+    Parser = argparse.ArgumentParser()
+    Parser.add_argument('-u', action='store', dest='users',
                         help=helpstr, required=True)
-    parser.add_argument('--version', action='version', version='%(prog)s 1.0')
-    results = parser.parse_args()
+    Parser.add_argument('--version', action='version', version='%(prog)s 1.0')
+    parseresults = Parser.parse_args()
     # if (results.users == None and results.length == None):
     #     parser.print_help()
     #     exit(-1)
-    main(results)
+    main(parseresults)
