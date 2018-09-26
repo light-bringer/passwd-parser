@@ -8,6 +8,21 @@ import argparse
 
 
 def read_passwd(filepath):
+    '''
+    a function to read the passwd files format
+    and turn them into a dictionary with key as 
+    the username and the rest of the data parsed
+    as a list
+    input : filepath
+    output : dict {
+        'yodebu' : [
+            'yodebu', 
+            'Debapriya Das...', 
+            '11eaadas',
+            ......
+            ]
+    }
+    '''
     file_object = open(filepath, 'r')
     shell = {}
     for line in file_object:
@@ -40,6 +55,8 @@ def search_and_remove(users, shelldict):
 
 def write_passwd(filepath, shelldict):
     '''
+    a function to write the metadata to the 
+    new generate passwd file
     '''
     try:
         with open(filepath, 'w') as f:
@@ -98,6 +115,10 @@ def copy_permissions(src, dest):
 
 
 def move_file(src, dest):
+    '''
+    a function to move a file from one location to another
+    overwrites if the destination file exists
+    '''
     dst_dirname = os.path.dirname(dest)
     try:
         dst_filename = os.path.join(dst_dirname, os.path.basename(src))
@@ -110,6 +131,9 @@ def move_file(src, dest):
 
 
 def main(args):
+    '''
+    the holy grail main ()
+    '''
     userlist = str(args.users)
     userlist = userlist.split(',')
     files = ['./data/passwd', './data/shadow']
