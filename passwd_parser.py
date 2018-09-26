@@ -6,6 +6,7 @@ import shutil
 import datetime
 import argparse
 
+
 def read_passwd(filepath):
     file_object = open(filepath, 'r')
     shell = {}
@@ -14,9 +15,9 @@ def read_passwd(filepath):
         fields = line.split(":")
         # print fields
         shell[fields[0]] = fields
-    
     file_object.close()
     return shell
+
 
 def search_and_remove(users, shelldict):
     '''
@@ -30,12 +31,12 @@ def search_and_remove(users, shelldict):
     shells = dict(shelldict)
     for user in users:
         if user in shells.keys():
-            print "user found : %s"%(user)
+            print "user found : %s" % (user)
             a = shells.pop(user, None)
             if a:
-                print "User popped : %s"%(a)
-    
+                print "User popped : %s" % (a)
     return shells
+
 
 def write_passwd(filepath, shelldict):
     '''
@@ -44,23 +45,24 @@ def write_passwd(filepath, shelldict):
         with open(filepath, 'w') as f:
             for value in shelldict.values():
                 line = ":".join(value)
-                print "writing line: %s to file"%(line)
+                print "writing line: %s to file" % (line)
                 f.write("%s\n" % line)
 
     except (OSError, IOError), e:
         print "Some file creation error..."
         print e
         return False
-    
+
 
 def backup(filepath, appendstr):
     '''
     creates a backup of a file from one location to another
     input : location file path
-    output : location file path + "_backup_" + curr_datetime 
+    output : location file path + "_backup_" + curr_datetime
     '''
     srcabspath = os.path.abspath(filepath)
-    destabspath = srcabspath + "_" + appendstr + "_" + datetime.datetime.now().strftime("%y%m%d%H%M%S")
+    destabspath = srcabspath + "_" + appendstr   \
+        + "_" + datetime.datetime.now().strftime("%y%m%d%H%M%S")
     print srcabspath, destabspath
     try:
         if os.path.exists(srcabspath):
@@ -76,7 +78,7 @@ def backup(filepath, appendstr):
         print "Some copy error..."
         print e
         return False
-    
+
 
 def copy_permissions(src, dest):
     '''
@@ -94,13 +96,13 @@ def copy_permissions(src, dest):
         print e
         return False
 
+
 def move_file(src, dest):
     dst_dirname = os.path.dirname(dest)
     try:
         dst_filename = os.path.join(dst_dirname, os.path.basename(src))
         shutil.move(src, dst_filename)
-        print "moved file from %s to %s"%(src, dst_filename)
-    
+        print "moved file from %s to %s" % (src, dst_filename)
     except (OSError, IOError), e:
         print "Some exception in moving the file..."
         print e
@@ -122,21 +124,21 @@ def main(args):
         else:
             backupfilepath = result
             shellobj = read_passwd(file)
-            updated_shell_dict = search_and_remove(users=users, shelldict=shellobj)
+            updated_shell_dict = search_and_remove(users, shellobj)
             tempfile = os.path.join(tempdir, os.path.basename(file))
             write_passwd(filepath=tempfile, shelldict=updated_shell_dict)
             move_file(tempfile, file)
             copy_permissions(backupfilepath, file)
-    
+
     return
 
 
-
 if __name__ == '__main__':
-    helpstr = "Send usernames in comma separated format, with no space in between"
+    helpstr = """Send usernames in comma separated format, with no space.\n
+                Example : python programname.py -u user1,user2"""
     parser = argparse.ArgumentParser()
     parser.add_argument('-u', action='store', dest='users',
-                    help=helpstr, required=True)
+                        help=helpstr, required=True)
     parser.add_argument('--version', action='version', version='%(prog)s 1.0')
     results = parser.parse_args()
     # if (results.users == None and results.length == None):
