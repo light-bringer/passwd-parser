@@ -4,7 +4,7 @@
 This module removes the /etc/passwd entries 
 for a given user
 
-Usage : python2 programname.py -u user1,user2
+Usage : /path/to/python2 programname.py -u user1,user2
 """
 
 
