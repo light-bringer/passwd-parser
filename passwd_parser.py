@@ -1,8 +1,10 @@
 #!/usr/bin/env python2
 
 """
-This module does blah blah.
-@Author : Debapriya Das <yodebu@gmail.com>
+This module removes the /etc/passwd entries 
+for a given user
+
+Usage : python2 programname.py -u user1,user2
 """
 
 
@@ -20,9 +22,9 @@ def read_passwd(filepath):
     as a list
     input : filepath
     output : dict {
-        'yodebu' : [
-            'yodebu',
-            'Debapriya Das...',
+        'user' : [
+            'user',
+            'First Name...',
             '11eaadas',
             ......
             ]
@@ -141,7 +143,7 @@ def main(args):
     '''
     userlist = str(args.users)
     userlist = userlist.split(',')
-    files = ['./data/passwd', './data/shadow']
+    files = ['/etc/passwd', '/etc/shadow']
     users = userlist
     tempdir = "temp"
     result = ""
@@ -170,7 +172,4 @@ if __name__ == '__main__':
                         help=helpstr, required=True)
     Parser.add_argument('--version', action='version', version='%(prog)s 1.0')
     parseresults = Parser.parse_args()
-    # if (results.users == None and results.length == None):
-    #     parser.print_help()
-    #     exit(-1)
     main(parseresults)
